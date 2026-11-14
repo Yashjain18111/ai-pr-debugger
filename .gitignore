@@ -1,5 +1,86 @@
-.venv/
+# ==============================================================================
+# Git Ignore Configuration for AI PR Debugger
+# ==============================================================================
+
+# --- Secrets and Environment Configurations ---
+# Ignore all .env files (containing API keys and tokens)
 .env
+.env.*
+.env.local
+.env.development
+.env.test
+.env.production
+# Allow the example template to be checked in
+!.env.example
+
+# --- Virtual Environments ---
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# --- Python Bytecode & Cache ---
 __pycache__/
-.pytest_cache/
 *.py[cod]
+*$py.class
+*.so
+*.pyd
+
+# --- Distribution / Packaging ---
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# --- Unit Testing & Coverage ---
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+htmlcov/
+
+# --- IDEs & Code Editors ---
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# --- Operating System Files ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+
+# --- Generated Output & Review Artifacts ---
+pr_review.md
+review_output.md
+review_output.json
+*.patch
+*.diff
+*.log
