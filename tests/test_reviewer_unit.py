@@ -1,4 +1,5 @@
 
+import os
 from unittest.mock import MagicMock, patch
 
 from app.reviewer import BugFinding, ReviewReport, review_code
@@ -19,18 +20,20 @@ def test_review_code_returns_structured_report():
         ],
     )
 
-    with patch("app.reviewer.ChatOpenAI") as mock_chat:
-        mock_llm = MagicMock()
-        mock_reviewer = MagicMock()
+    with patch.dict(os.environ, {"MOCK_LLM": ""}, clear=False):
+        with patch("app.reviewer.ChatOpenAI") as mock_chat:
+            mock_llm = MagicMock()
+            mock_reviewer = MagicMock()
 
-        mock_chat.return_value = mock_llm
-        mock_llm.with_structured_output.return_value = mock_reviewer
-        mock_reviewer.invoke.return_value = expected_report
+            mock_chat.return_value = mock_llm
+            mock_llm.with_structured_output.return_value = mock_reviewer
+            mock_reviewer.invoke.return_value = expected_report
 
-        result = review_code(
-            "def calculate_total(price, quantity):\n"
-            "    return price + quantity"
-        )
+            result = review_code(
+                "def calculate_total(price, quantity):\n"
+                "    return price + quantity",
+                mock=False,
+            )
 
     assert result == expected_report
     assert len(result.findings) == 1

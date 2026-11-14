@@ -150,10 +150,11 @@ def review_code(
     base_url: Optional[str] = None,
     api_key: Optional[str] = None,
     model: Optional[str] = None,
-    mock: bool = False,
+    mock: Optional[bool] = None,
 ) -> ReviewReport:
     """Review raw source code or script."""
-    if mock or os.getenv("MOCK_LLM", "").lower() in ("true", "1", "yes"):
+    use_mock = mock if mock is not None else (os.getenv("MOCK_LLM", "").lower() in ("true", "1", "yes"))
+    if use_mock:
         return _generate_mock_report(source_code)
 
     llm = get_llm(base_url=base_url, api_key=api_key, model=model)
@@ -194,7 +195,7 @@ def review_diff(
     base_url: Optional[str] = None,
     api_key: Optional[str] = None,
     model: Optional[str] = None,
-    mock: bool = False,
+    mock: Optional[bool] = None,
 ) -> ReviewReport:
     """Review git diff with file and hunk parsing."""
     parsed_files = parse_unified_diff(diff_text)
@@ -208,7 +209,8 @@ def review_diff(
         f"--- File: {f.file_path} ---\n{f.raw_diff}" for f in active_diffs
     )
 
-    if mock or os.getenv("MOCK_LLM", "").lower() in ("true", "1", "yes"):
+    use_mock = mock if mock is not None else (os.getenv("MOCK_LLM", "").lower() in ("true", "1", "yes"))
+    if use_mock:
         return _generate_mock_report(formatted_diff)
 
     llm = get_llm(base_url=base_url, api_key=api_key, model=model)
